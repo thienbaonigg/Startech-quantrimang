@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="STARTECH - Danh sách sản phẩm: Laptop doanh nghiệp, Thiết bị mạng, Giải pháp lưu trữ. Giá cả công khai, bảo hành chính hãng.">
+  <title>Sản phẩm | STARTECH</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="STARTECH - Trang chủ">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#1e40af"/>
+          <path d="M8 16L14 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="logo-text">STARTECH</span>
+      </a>
+      <nav class="nav" role="navigation" aria-label="Menu chính">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Mở menu">
+          <span class="hamburger"></span>
+        </button>
+        <ul id="nav-menu" class="nav-menu">
+          <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+          <li><a href="products.html" class="nav-link active">Sản phẩm</a></li>
+          <li><a href="services.html" class="nav-link">Dịch vụ</a></li>
+          <li><a href="about.html" class="nav-link">Giới thiệu</a></li>
+          <li><a href="contact.html" class="nav-link">Liên hệ</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="tel:02812345678" class="btn btn-phone" aria-label="Gọi hotline">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span>028.1234.5678</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header" aria-labelledby="page-title">
+      <div class="container">
+        <h1 id="page-title" class="page-title">Sản phẩm STARTECH</h1>
+        <p class="page-subtitle">Thiết bị chính hãng, bảo hành chính hãng 24 tháng, hỗ trợ kỹ thuật trọn đời.</p>
+      </div>
+    </section>
+
+    <section class="products-full" aria-labelledby="products-title">
+      <div class="container">
+        <div class="category-tabs" role="tablist" aria-label="Danh mục sản phẩm">
+          <button role="tab" class="tab-btn active" data-category="all" aria-selected="true">Tất cả</button>
+          <button role="tab" class="tab-btn" data-category="Laptop" aria-selected="false">Laptop</button>
+          <button role="tab" class="tab-btn" data-category="Thiết bị mạng" aria-selected="false">Thiết bị mạng</button>
+          <button role="tab" class="tab-btn" data-category="Lưu trữ" aria-selected="false">Lưu trữ</button>
+        </div>
+
+        <div class="products-grid" id="products-grid" role="tabpanel"></div>
+      </div>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-title">
+      <div class="container">
+        <h2 id="cta-title">Chưa tìm thấy sản phẩm phù hợp?</h2>
+        <p>Liên hệ STARTECH để được tư vấn giải pháp tùy chỉnh cho doanh nghiệp của bạn.</p>
+        <a href="contact.html" class="btn btn-primary btn-lg">Nhận tư vấn miễn phí</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <rect width="32" height="32" rx="8" fill="#1e40af"/>
+              <path d="M8 16L14 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text">STARTECH</span>
+          </a>
+          <p>Công ty TNHH Công Nghệ và Dịch Vụ TIN HỌC STARTECH - Đối tác công nghệ tin cậy cho doanh nghiệp Việt Nam.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <h4>Sản phẩm</h4>
+          <ul>
+            <li><a href="products.html">Laptop doanh nghiệp</a></li>
+            <li><a href="products.html">Thiết bị mạng</a></li>
+            <li><a href="products.html">Lưu trữ dữ liệu</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <h4>Dịch vụ</h4>
+          <ul>
+            <li><a href="services.html">Bảo trì hệ thống</a></li>
+            <li><a href="services.html">Lắp đặt mạng</a></li>
+            <li><a href="services.html">Tư vấn chuyển đổi số</a></li>
+          </ul>
+        </nav>
+        <div class="footer-contact">
+          <h4>Liên hệ</h4>
+          <address>
+            <p><strong>Chi nhánh 1 (Trụ sở):</strong><br>123 Nguyễn Văn Linh, Quận Tân Bình, TP.HCM</p>
+            <p><strong>Chi nhánh 2:</strong><br>45 Lê Lợi, Quận Hải Châu, TP.Đà Nẵng</p>
+            <p><a href="tel:02812345678">Hotline: 028.1234.5678</a></p>
+            <p><a href="mailto:support@startech.vn">Email: support@startech.vn</a></p>
+          </address>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 STARTECH. Mọi quyền được bảo lưu.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="chatbot-widget-container"></div>
+
+  <script>
+    window.CHATBOT_API_BASE = 'http://localhost:8080/api';
+  </script>
+  <script src="chat-widget.js"></script>
+  <script src="products.js"></script>
+</body>
+</html>

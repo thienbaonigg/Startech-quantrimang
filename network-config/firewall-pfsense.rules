@@ -1,0 +1,252 @@
+# STARTECH - Firewall Rules (pfSense format)
+# Import vào pfSense: Firewall > Rules > [Interface] > Import
+# Hoặc cấu hình thủ công theo thứ tự ưu tiên (số thấp = ưu tiên cao)
+
+## Định nghĩa Aliases (Firewall > Aliases)
+# Tạo trước khi tạo rules
+
+# Alias: Internal_Networks
+# Type: Network(s)
+# Networks:
+#   192.168.10.0/24   (CN1 Server/Mgmt)
+#   192.168.20.0/24   (CN1 Sales)
+#   192.168.30.0/24   (CN1 Acct/HR)
+#   192.168.110.0/24  (CN2 Server/Mgmt)
+#   192.168.120.0/24  (CN2 Sales/CS)
+# Description: "All internal corporate networks"
+
+# Alias: Mgmt_Networks
+# Type: Network(s)
+# Networks:
+#   192.168.10.0/24
+#   192.168.110.0/24
+# Description: "Management VLANs for admin access"
+
+# Alias: Guest_Networks
+# Type: Network(s)
+# Networks:
+#   192.168.40.0/24
+#   192.168.140.0/24
+# Description: "Guest WiFi networks - Internet only"
+
+# Alias: Server02_Chatbot
+# Type: Host(s)
+# Host: 192.168.10.12
+# Description: "Server02 - Web, Chatbot backend, DHCP"
+
+# Alias: DNS_Servers
+# Type: Host(s)
+# Hosts: 192.168.10.11, 192.168.110.11
+# Description: "Internal DNS (DC1, DC2)"
+
+# Alias: Ollama_API_Hosts
+# Type: Host(s) hoặc URL Table (nếu dùng FQDN)
+# Hosts: (để trống - Ollama chạy local, không cần ra Internet)
+# Description: "Ollama model registry (chỉ khi pull model lần đầu)"
+
+# Alias: Web_Ports
+# Type: Port(s)
+# Ports: 80, 443
+# Description: "HTTP/HTTPS"
+
+# Alias: Mgmt_Ports
+# Type: Port(s)
+# Ports: 22, 3389, 5985, 5986
+# Description: "SSH, RDP, WinRM"
+
+## ============================================================
+## RULES - WAN INTERFACE (Inbound from Internet)
+## ============================================================
+# Thứ tự ưu tiên từ trên xuống
+
+# 1. Block bogon networks (pfSense default)
+# Action: Block | Source: Bogon Networks | Dest: Any | Log: Yes
+
+# 2. Block private networks (RFC1918) from Internet
+# Action: Block | Source: RFC1918 Networks | Dest: Any | Log: Yes
+
+# 3. Allow HTTPS to Web Server (Server02) - Port Forward từ WAN
+# Action: Pass | Proto: TCP | Source: Any | Dest: WAN Address | Dest Port: 443 (HTTPS)
+# NAT Port Forward: WAN:443 -> 192.168.10.12:443
+# Description: "Allow HTTPS to Web Server"
+
+# 4. Allow HTTP to Web Server (redirect to HTTPS)
+# Action: Pass | Proto: TCP | Source: Any | Dest: WAN Address | Dest Port: 80 (HTTP)
+# NAT Port Forward: WAN:80 -> 192.168.10.12:80
+# Description: "Allow HTTP to Web Server (redirect)"
+
+# 5. Block all other inbound from Internet
+# Action: Block | Source: Any | Dest: Any | Log: Yes
+# Description: "Default deny inbound"
+
+## ============================================================
+## RULES - LAN INTERFACE (Internal Networks -> Outbound)
+## ============================================================
+# Interface: LAN (kết nối L3-SW-CN1)
+# Thứ tự từ trên xuống
+
+# 1. Allow Management access to Firewall GUI/SSH
+# Action: Pass | Proto: TCP | Source: Mgmt_Networks | Dest: This Firewall | Dest Port: Mgmt_Ports
+# Description: "Allow Mgmt access to Firewall"
+
+# 2. Allow Internal DNS to DNS Servers
+# Action: Pass | Proto: TCP/UDP | Source: Internal_Networks | Dest: DNS_Servers | Dest Port: 53
+# Description: "Allow Internal DNS queries"
+
+# 3. Allow DHCP to Server02 (DHCP Server)
+# Action: Pass | Proto: UDP | Source: Internal_Networks | Dest: Server02_Chatbot | Dest Port: 67,68
+# Description: "Allow DHCP to Server02"
+
+# 4. Allow Internal -> Internal (Inter-VLAN routing do L3 Switch làm)
+# Note: Inter-VLAN traffic không đi qua firewall nếu L3 Switch routing
+# Rule này chỉ cho traffic đi ra Internet
+# Action: Pass | Proto: Any | Source: Internal_Networks | Dest: Internal_Networks
+# Description: "Allow Inter-VLAN (if hairpin)"
+
+# 5. Allow Internal -> Internet (HTTP/HTTPS)
+# Action: Pass | Proto: TCP | Source: Internal_Networks | Dest: Any | Dest Port: Web_Ports
+# Description: "Allow Web browsing"
+
+# 6. Allow Server02 -> Internet (HTTPS) for Ollama model pull (chỉ lần đầu)
+# Action: Pass | Proto: TCP | Source: Server02_Chatbot | Dest: Any | Dest Port: 443
+# Description: "Allow Server02 pull Ollama model"
+# NOTE: Disable sau khi pull xong model
+
+# 7. Block Guest Networks accessing Internal Networks
+# Action: Block | Proto: Any | Source: Guest_Networks | Dest: Internal_Networks | Log: Yes
+# Description: "Block Guest -> Internal"
+
+# 8. Allow Guest Networks -> Internet Only
+# Action: Pass | Proto: TCP/UDP | Source: Guest_Networks | Dest: !Internal_Networks | Dest Port: Web_Ports
+# Description: "Allow Guest Internet only"
+
+# 9. Block all other outbound
+# Action: Block | Source: Any | Dest: Any | Log: Yes
+# Description: "Default deny outbound"
+
+## ============================================================
+## RULES - DMZ INTERFACE (Server02 Web Public)
+## ============================================================
+# Nếu tách DMZ riêng cho Server02
+
+# 1. Allow Internet -> Server02 HTTPS
+# Action: Pass | Proto: TCP | Source: Any | Dest: Server02_Chatbot | Dest Port: 443
+# Description: "Public HTTPS to Web Server"
+
+# 2. Allow Server02 -> Internal DNS
+# Action: Pass | Proto: TCP/UDP | Source: Server02_Chatbot | Dest: DNS_Servers | Dest Port: 53
+# Description: "Web Server DNS"
+
+# 3. Allow Server02 -> AD (DC1, DC2) for authentication
+# Action: Pass | Proto: TCP | Source: Server02_Chatbot | Dest: 192.168.10.11, 192.168.110.11 | Dest Port: 88, 389, 636, 3268, 3269
+# Description: "Web Server AD Auth"
+
+# 4. Block Server02 -> Other Internal
+# Action: Block | Proto: Any | Source: Server02_Chatbot | Dest: Internal_Networks | Log: Yes
+# Description: "Restrict Web Server lateral movement"
+
+# 5. Allow Server02 -> Internet HTTPS (Ollama model pull, Windows Update)
+# Action: Pass | Proto: TCP | Source: Server02_Chatbot | Dest: Any | Dest Port: 443
+# Description: "Server02 Internet HTTPS"
+
+# 6. Block all other from DMZ
+# Action: Block | Source: Any | Dest: Any | Log: Yes
+
+## ============================================================
+## NAT RULES (Firewall > NAT)
+## ============================================================
+
+# Port Forward (WAN -> Server02)
+# 1. HTTPS: Interface: WAN | Proto: TCP | Dest: WAN Address | Dest Port: 443
+#    Redirect: 192.168.10.12 | Redirect Port: 443 | Description: "Web Server HTTPS"
+
+# 2. HTTP: Interface: WAN | Proto: TCP | Dest: WAN Address | Dest Port: 80
+#    Redirect: 192.168.10.12 | Redirect Port: 80 | Description: "Web Server HTTP (redirect)"
+
+# Outbound NAT (Auto cho LAN, Manual cho DMZ nếu cần)
+# Hybrid Outbound NAT mode
+
+## ============================================================
+## SCHEDULES (Firewall > Schedules)
+## ============================================================
+# Tạo schedule cho quy tắc giới hạn giờ (ví dụ: chặn mạng xã hội giờ hành chính)
+# Name: Business_Hours
+# Time: Mon-Fri 08:00-17:30
+# Month/Day: All
+
+## ============================================================
+## LOGGING & MONITORING
+## ============================================================
+# Enable logging trên:
+# - All Block rules (để detect attack)
+# - All Pass rules quan trọng (Web, DNS, AD)
+# - Guest Network rules
+
+# Syslog: Gửi đến Server02 (Graylog/SIEM) hoặc pfSense local
+# Status > System Logs > Settings
+#   - Log packets matched from the default block rules: Checked
+#   - Log packets matched from the default pass rules: Checked
+#   - Remote logging: Enable, IP: 192.168.10.12, Port: 514
+
+## ============================================================
+## TEST CASES (cho Chương 5 báo cáo)
+## ============================================================
+# STT | Kịch bản | Kết quả mong đợi | Rule áp dụng
+# 1   | Ping CN1 <-> CN2 | Thành công | OSPF routing, allow inter-VLAN
+# 2   | Máy trạm nội bộ ra Internet (web) | Thành công | Rule LAN #5
+# 3   | Máy VLAN Guest (40/140) truy cập 192.168.10.0/24 | Bị chặn | Rule LAN #7
+# 4   | Khách truy cập https://startech.local | Thành công | NAT Port Forward + DMZ #1
+# 5   | Máy trạm (không phải Server02) curl https://api.openai.com | Bị chặn | Rule LAN #6 (chỉ Server02)
+# 6   | Server02 pull model Ollama (ollama pull qwen2.5:7b) | Thành công | Rule LAN #6 / DMZ #5
+# 7   | RDP từ Mgmt VLAN (10/110) đến Server02 | Thành công | Rule LAN #1 + Windows FW
+# 8   | SSH từ Internet đến Firewall | Bị chặn | WAN default deny
+
+## ============================================================
+## CISCO ASA ALTERNATIVE (nếu dùng ASA thay pfSense)
+## ============================================================
+! object network INTERNAL_NETWORKS
+!  network-object 192.168.10.0 255.255.255.0
+!  network-object 192.168.20.0 255.255.255.0
+!  network-object 192.168.30.0 255.255.255.0
+!  network-object 192.168.110.0 255.255.255.0
+!  network-object 192.168.120.0 255.255.255.0
+!
+! object network SERVER02
+!  host 192.168.10.12
+!
+! object network DNS_SERVERS
+!  host 192.168.10.11
+!  host 192.168.110.11
+!
+! object network GUEST_NETWORKS
+!  network-object 192.168.40.0 255.255.255.0
+!  network-object 192.168.140.0 255.255.255.0
+!
+! access-list WAN_IN extended permit tcp any host <WAN_IP> eq 443
+! access-list WAN_IN extended permit tcp any host <WAN_IP> eq 80
+!
+! access-list LAN_OUT extended permit udp object INTERNAL_NETWORKS object DNS_SERVERS eq domain
+! access-list LAN_OUT extended permit udp object INTERNAL_NETWORKS object SERVER02 eq bootpc
+! access-list LAN_OUT extended permit tcp object INTERNAL_NETWORKS any eq www
+! access-list LAN_OUT extended permit tcp object INTERNAL_NETWORKS any eq 443
+! access-list LAN_OUT extended permit tcp object SERVER02 any eq 443
+! access-list LAN_OUT extended deny ip object GUEST_NETWORKS object INTERNAL_NETWORKS log
+! access-list LAN_OUT extended permit tcp object GUEST_NETWORKS any eq www
+! access-list LAN_OUT extended permit tcp object GUEST_NETWORKS any eq 443
+! access-list LAN_OUT extended deny ip any any log
+!
+! access-group WAN_IN in interface WAN
+! access-group LAN_OUT in interface LAN
+!
+! nat (LAN,WAN) source dynamic INTERNAL_NETWORKS interface
+! nat (DMZ,WAN) source static SERVER02 SERVER02
+!
+! object network SERVER02
+!  nat (DMZ,WAN) static <WAN_IP>
+!
+! class-map WEB_TRAFFIC
+!  match access-list WAN_IN
+! policy-map WEB_POLICY
+!  class WEB_TRAFFIC
+!   inspect http
+! service-policy WEB_POLICY interface WAN

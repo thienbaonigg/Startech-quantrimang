@@ -1,0 +1,204 @@
+<mxfile host="app.diagrams.net" modified="2026-11-18" agent="5.0 (Windows)" etag="startech-topology" version="24.6.3" type="device">
+  <diagram name="STARTECH Network Topology" id="topology">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Internet Cloud -->
+        <mxCell id="internet" value="INTERNET" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e8f0fe;strokeColor=#1a73e8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="20" width="120" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Firewall -->
+        <mxCell id="firewall" value="FIREWALL&#10;(pfSense / Cisco ASA)&#10;WAN / LAN / DMZ" style="shape=mxgraph.cisco19.firewall;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="110" width="180" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- WAN Link Label -->
+        <mxCell id="wanlabel" value="WAN Link: 10.0.0.0/30" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#666;" vertex="1" parent="1">
+          <mxGeometry x="480" y="320" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== CHI NHÁNH 1 (TRẠI) ==================== -->
+        <!-- CN1 Box -->
+        <mxCell id="cn1box" value="CHI NHÁNH 1 (TP.HCM - Trụ sở)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontSize=12;fontStyle=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="480" height="600" as="geometry"/>
+        </mxCell>
+
+        <!-- Router CN1 -->
+        <mxCell id="router-cn1" value="R-CN1&#10;Cisco ISR 4331&#10;G0/0: WAN (DHCP)&#10;G0/1: Trunk to L3-SW&#10;G0/2: WAN Link 10.0.0.1/30" style="shape=mxgraph.cisco19.router;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="130" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- L3 Switch CN1 -->
+        <mxCell id="l3sw-cn1" value="L3-SW-CN1&#10;Catalyst 3650&#10;SVI: VLAN 10,20,30,40&#10;OSPF Area 0&#10;Root Bridge VLAN 10-40" style="shape=mxgraph.cisco19.switch;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="250" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- L2 Switch CN1-1 -->
+        <mxCell id="l2sw-cn1-1" value="L2-SW-CN1-1&#10;Catalyst 2960&#10;Access: VLAN 20,30,10&#10;Trunk to L3-SW" style="shape=mxgraph.cisco19.switch;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="370" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- L2 Switch CN1-2 -->
+        <mxCell id="l2sw-cn1-2" value="L2-SW-CN1-2&#10;Catalyst 2960&#10;Access: VLAN 20,30,40&#10;Trunk to L3-SW" style="shape=mxgraph.cisco19.switch;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="180" y="370" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Server01 (DC1) -->
+        <mxCell id="server01" value="Server01 (DC1)&#10;192.168.10.11&#10;Roles: AD DS, DNS, ADCS&#10;VLAN 10 (Mgmt)" style="shape=mxgraph.cisco19.server;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="250" width="150" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Server02 (File/Web/DHCP/Chatbot) -->
+        <mxCell id="server02" value="Server02 (Web/File/DHCP/Chatbot)&#10;192.168.10.12&#10;Roles: IIS, File, DHCP, Mail, Chatbot&#10;VLAN 10 (Mgmt)" style="shape=mxgraph.cisco19.server;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="350" width="150" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- WiFi AP CN1 -->
+        <mxCell id="wifi-cn1" value="WiFi AP CN1&#10;Guest VLAN 40&#10;Internet Only" style="shape=mxgraph.cisco19.wireless_access_point;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#ef6c00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="460" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Workstations CN1 -->
+        <mxCell id="wks-cn1" value="Workstations CN1&#10;VLAN 20: Sales (20)&#10;VLAN 30: Acct/HR (13)&#10;VLAN 40: Guest WiFi" style="shape=mxgraph.cisco19.pc;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#757575;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="470" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- VLAN Labels CN1 -->
+        <mxCell id="vlan10-label" value="VLAN 10: 192.168.10.0/24&#10;Server/Mgmt" style="text;html=1;strokeColor=none;fillColor=#e8f5e9;fontSize=9;fontColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="340" y="230" width="150" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="vlan20-label" value="VLAN 20: 192.168.20.0/24&#10;Sales" style="text;html=1;strokeColor=none;fillColor=#e8f5e9;fontSize=9;fontColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="20" y="450" width="140" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="vlan30-label" value="VLAN 30: 192.168.30.0/24&#10;Acct/HR" style="text;html=1;strokeColor=none;fillColor=#e8f5e9;fontSize=9;fontColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="20" y="350" width="140" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="vlan40-label" value="VLAN 40: 192.168.40.0/24&#10;Guest WiFi" style="text;html=1;strokeColor=none;fillColor=#fff3e0;fontSize=9;fontColor=#ef6c00;" vertex="1" parent="1">
+          <mxGeometry x="340" y="440" width="130" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Connections CN1 -->
+        <mxCell id="conn-fw-r1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="firewall" target="router-cn1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-r1-l3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;dashed=1;" edge="1" parent="1" source="router-cn1" target="l3sw-cn1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-l2-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="l3sw-cn1" target="l2sw-cn1-1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-l2-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="l3sw-cn1" target="l2sw-cn1-2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-s01" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2e7d32;strokeWidth=2;" edge="1" parent="1" source="l3sw-cn1" target="server01">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-s02" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2e7d32;strokeWidth=2;" edge="1" parent="1" source="l3sw-cn1" target="server02">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-wifi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ef6c00;strokeWidth=2;dashed=1;" edge="1" parent="1" source="l3sw-cn1" target="wifi-cn1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l2-wks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#757575;strokeWidth=1;" edge="1" parent="1" source="l2sw-cn1-1" target="wks-cn1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== CHI NHÁNH 2 ==================== -->
+        <!-- CN2 Box -->
+        <mxCell id="cn2box" value="CHI NHÁNH 2 (Đà Nẵng)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=12;fontStyle=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="100" width="440" height="600" as="geometry"/>
+        </mxCell>
+
+        <!-- Router CN2 -->
+        <mxCell id="router-cn2" value="R-CN2&#10;Cisco ISR 4331&#10;G0/0: WAN (DHCP)&#10;G0/1: Trunk to L3-SW&#10;G0/2: WAN Link 10.0.0.2/30" style="shape=mxgraph.cisco19.router;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="130" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- L3 Switch CN2 -->
+        <mxCell id="l3sw-cn2" value="L3-SW-CN2&#10;Catalyst 3650&#10;SVI: VLAN 110,120,140&#10;OSPF Area 0&#10;Root Bridge VLAN 110-140" style="shape=mxgraph.cisco19.switch;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="250" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- L2 Switch CN2-1 -->
+        <mxCell id="l2sw-cn2-1" value="L2-SW-CN2-1&#10;Catalyst 2960&#10;Access: VLAN 120,110&#10;Trunk to L3-SW" style="shape=mxgraph.cisco19.switch;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="720" y="370" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- L2 Switch CN2-2 -->
+        <mxCell id="l2sw-cn2-2" value="L2-SW-CN2-2&#10;Catalyst 2960&#10;Access: VLAN 120,140&#10;Trunk to L3-SW" style="shape=mxgraph.cisco19.switch;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="370" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Server03 (DC2) -->
+        <mxCell id="server03" value="Server03 (DC2)&#10;192.168.110.11&#10;Roles: AD DS, DNS&#10;VLAN 110 (Mgmt)" style="shape=mxgraph.cisco19.server;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="250" width="150" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- WiFi AP CN2 -->
+        <mxCell id="wifi-cn2" value="WiFi AP CN2&#10;Guest VLAN 140&#10;Internet Only" style="shape=mxgraph.cisco19.wireless_access_point;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#ef6c00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="350" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Workstations CN2 -->
+        <mxCell id="wks-cn2" value="Workstations CN2&#10;VLAN 120: Sales/CS (30)&#10;VLAN 140: Guest WiFi" style="shape=mxgraph.cisco19.pc;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#757575;fontSize=10;" vertex="1" parent="1">
+          <mxCell id="wks-cn2-inner" value="" style="text;html=1;strokeColor=none;fillColor=none;" vertex="1" parent="wks-cn2">
+            <mxGeometry x="0" y="0" width="10" height="10" as="geometry"/>
+          </mxCell>
+          <mxGeometry x="720" y="470" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- VLAN Labels CN2 -->
+        <mxCell id="vlan110-label" value="VLAN 110: 192.168.110.0/24&#10;Server/Mgmt" style="text;html=1;strokeColor=none;fillColor=#e3f2fd;fontSize=9;fontColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="230" width="150" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="vlan120-label" value="VLAN 120: 192.168.120.0/24&#10;Sales/CS" style="text;html=1;strokeColor=none;fillColor=#e3f2fd;fontSize=9;fontColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="720" y="450" width="140" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="vlan140-label" value="VLAN 140: 192.168.140.0/24&#10;Guest WiFi" style="text;html=1;strokeColor=none;fillColor=#fff3e0;fontSize=9;fontColor=#ef6c00;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="330" width="130" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Connections CN2 -->
+        <mxCell id="conn-fw-r2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="firewall" target="router-cn2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-r2-l3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;dashed=1;" edge="1" parent="1" source="router-cn2" target="l3sw-cn2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-l2-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="l3sw-cn2" target="l2sw-cn2-1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-l2-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="l3sw-cn2" target="l2sw-cn2-2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-s03" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2e7d32;strokeWidth=2;" edge="1" parent="1" source="l3sw-cn2" target="server03">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l3-wifi2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ef6c00;strokeWidth=2;dashed=1;" edge="1" parent="1" source="l3sw-cn2" target="wifi-cn2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-l2-wks2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#757575;strokeWidth=1;" edge="1" parent="1" source="l2sw-cn2-1" target="wks-cn2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- WAN Link between Routers -->
+        <mxCell id="conn-r1-r2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e65100;strokeWidth=3;dashed=1;" edge="1" parent="1" source="router-cn1" target="router-cn2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="LEGEND&#10;🟦 Blue = Network Devices (Router/Switch)&#10;🟩 Green = Servers (Windows Server)&#10;🟧 Orange = Wireless / Guest&#10;⬜ Gray = Workstations&#10;─── Solid = Trunk/Access&#10;- - - Dashed = WAN/Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#9e9e9e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="280" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- Title -->
+        <mxCell id="title" value="Hình 3.1. Sơ đồ mạng vật lý - STARTECH (2 Chi nhánh)" style="text;html=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;align=center;fontColor=#1a237e;" vertex="1" parent="1">
+          <mxGeometry x="300" y="10" width="500" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
